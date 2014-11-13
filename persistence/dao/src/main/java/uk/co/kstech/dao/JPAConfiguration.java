@@ -80,6 +80,7 @@ public class JPAConfiguration {
         rv.setDataSource(dataSource);
         rv.setLoadTimeWeaver(new InstrumentationLoadTimeWeaver());
         rv.setJpaPropertyMap(properties);
+        rv.setMappingResources();
         return rv;
     }
 

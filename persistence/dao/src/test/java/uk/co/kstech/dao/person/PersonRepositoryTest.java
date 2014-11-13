@@ -14,10 +14,11 @@ import org.springframework.util.Assert;
 import uk.co.kstech.dao.TestJpaConfig;
 import uk.co.kstech.model.person.Person;
 
-import javax.validation.*;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.Set;
 
 import static org.junit.Assert.assertThat;
 
@@ -55,41 +56,58 @@ public class PersonRepositoryTest {
     }
 
     @Test
+    public void shouldSaveRelationship() throws Exception {
+        final Person child = classUnderTest.save(createChild());
+        final Person father = classUnderTest.save(createFather(child));
+        Assert.notNull(child.getId());
+        Assert.notNull(father.getId());
+        Assert.notNull(father.getChildren().iterator().next().getId());
+    }
+
+    @Test
     public void shouldRetrievePerson() {
-        final Person saved = classUnderTest.save(savePerson());
+        final Person saved = savePerson();
         final Person loadedPerson = classUnderTest.findOne(saved.getId());
         Assert.notNull(loadedPerson.getId());
-        Assert.notNull(loadedPerson.getChildren().iterator().next().getId());
     }
 
-    private void validate(final Person person, int expectedViolations) {
-        Set<ConstraintViolation<Person>> constraintViolations = validator.validate( person );
-        assertThat(constraintViolations.size(), IsEqual.equalTo(expectedViolations));
-    }
 
     private Person savePerson() {
-        final Person saved = classUnderTest.save(createPerson());
+        final Person saved = classUnderTest.save(createFather());
         return saved;
     }
 
-    private Person createPerson() {
-        Person person = new Person();
-        person.setFirstName("Bob");
-        person.setMiddleName("Chaz");
-        person.setLastName("Davids");
-        person.setMale(true);
-        person.setBirthDate(LocalDate.of(1980, Month.JANUARY, 20));
-        person.addChild(createChild());
-        return person;
+    private Person createFather() {
+        Person Person = new Person();
+        Person.setFirstName("Bob");
+        Person.setMiddleName("Chaz");
+        Person.setLastName("Davids");
+        Person.setMale(true);
+        Person.setBirthDate(LocalDate.of(1980, Month.JANUARY, 20));
+        Person.addChild(createChild());
+        return Person;
+    }
+
+    private Person createFather(Person child) {
+        Person Person = new Person();
+        Person.setFirstName("Bob");
+        Person.setMiddleName("Chaz");
+        Person.setLastName("Davids");
+        Person.setMale(true);
+        Person.setBirthDate(LocalDate.of(1980, Month.JANUARY, 20));
+        Person.addChild(child);
+        return Person;
     }
 
     private Person createChild() {
-        Person person = new Person();
-        person.setFirstName("Dave");
-        person.setMiddleName("Chaz");
-        person.setLastName("Davids");
-        person.setMale(true);
-        person.setBirthDate(LocalDate.of(2000, Month.NOVEMBER, 20));
-        return person;
+
+        Person child = new Person();
+        child.setFirstName("Dave");
+        child.setMiddleName("Chaz");
+        child.setLastName("Davids");
+        child.setMale(true);
+        child.setBirthDate(LocalDate.of(2000, Month.NOVEMBER, 20));
+        return child;
     }
+
 }

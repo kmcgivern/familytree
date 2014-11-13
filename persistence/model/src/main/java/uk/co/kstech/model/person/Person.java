@@ -13,6 +13,7 @@ import java.util.Set;
  * Created by KMcGivern on 7/17/2014.
  */
 @Entity(name = "PERSON")
+@Table(name = "Person")
 public class Person extends DomainObject {
 
     @NotNull
@@ -39,33 +40,19 @@ public class Person extends DomainObject {
     @Column(name = "isMale")
     private boolean isMale;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL, optional = true)
-    private Person father;
+    private Set<Person> children = new HashSet<>(2);
 
-    @OneToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL, optional = true)
-    private Person mother;
-
-
-    private Set<Person> children = new HashSet<>(0);
-
-    //these annotations need to be on the getter.
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = Person.class)
-//    @JoinTable(name = "PERSON_ADDRESS", joinColumns = { @JoinColumn(name = "PERSON_ID") }, inverseJoinColumns = { @JoinColumn(name = "ADDRESS_ID") })
-//    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy="parent")
+    @OneToMany( cascade = CascadeType.ALL)
     public Set<Person> getChildren() {
         return children;
     }
 
-    public void setChildren(Set<Person> addresses) {
+    public void setChildren(Set<Person> parents) {
         this.children = children;
     }
 
     public void addChild(Person child) {
-        if (this.isMale) {
-            child.setFather(this);
-        } else {
-            child.setMother(this);
-        }
+
         children.add(child);
     }
 
@@ -109,20 +96,21 @@ public class Person extends DomainObject {
         this.lastName = lastName;
     }
 
+    public void setParent(Person parent) {
+    }
+
     public Person getFather() {
-        return father;
+        return null;
     }
 
     public void setFather(Person father) {
-        this.father = father;
     }
 
     public Person getMother() {
-        return mother;
+        return null;
     }
 
     public void setMother(Person mother) {
-        this.mother = mother;
     }
 
     public boolean isMale() {
