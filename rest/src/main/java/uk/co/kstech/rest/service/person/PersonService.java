@@ -1,6 +1,5 @@
 package uk.co.kstech.rest.service.person;
 
-import uk.co.kstech.dto.address.AddressDTO;
 import uk.co.kstech.dto.person.PersonDTO;
 
 import java.util.List;

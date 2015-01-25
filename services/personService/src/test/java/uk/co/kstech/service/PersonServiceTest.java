@@ -15,12 +15,11 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 import uk.co.kstech.dao.person.PersonDao;
-import uk.co.kstech.model.address.Address;
 import uk.co.kstech.model.person.Person;
 import uk.co.kstech.service.config.TestServiceConfiguration;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import static org.mockito.Mockito.doNothing;
@@ -106,21 +105,12 @@ public class PersonServiceTest {
 
     private Person createPerson() {
         Person person = new Person();
-        person.getAddresses().add(createAddress());
         person.setFirstName("Bob");
         person.setMiddleName("Chaz");
         person.setLastName("Davids");
-        person.setBirthDate(new Date());
+        person.setBirthDate( LocalDate.now());
         return person;
     }
 
-    private Address createAddress() {
-        Address address = new Address();
-        address.setFirstLine("1 New Street");
-        address.setSecondLine("");
-        address.setTown("Belfast");
-        address.setPostCode("BT1 1AB");
 
-        return address;
-    }
 }

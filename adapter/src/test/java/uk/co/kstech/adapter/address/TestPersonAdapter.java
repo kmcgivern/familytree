@@ -13,13 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import uk.co.kstech.adapter.person.PersonAdapter;
-import uk.co.kstech.dto.address.AddressDTO;
 import uk.co.kstech.dto.person.PersonDTO;
-import uk.co.kstech.model.address.Address;
 import uk.co.kstech.model.person.Person;
-import uk.co.kstech.service.AddressService;
 import uk.co.kstech.service.PersonService;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -41,9 +39,6 @@ public class TestPersonAdapter {
     @Mock
     private PersonService mockPersonService;
 
-    @Mock
-    private AddressAdapter mockAddressAdapter;
-
     @Before
     public void initMocks() {
         MockitoAnnotations.initMocks(this);
@@ -52,7 +47,6 @@ public class TestPersonAdapter {
     @Test
     public void shouldCopyPersonToDTO() {
         Person model = createPerson();
-        when(mockAddressAdapter.toAddressDTO(model.getAddresses())).thenReturn(Arrays.asList(createAddressDTO()));
 
         final PersonDTO dto = classUnderTest.toPersonDTO(model);
 
@@ -68,7 +62,6 @@ public class TestPersonAdapter {
         final List<Person> personList = new ArrayList<>();
         personList.add(model);
 
-        when(mockAddressAdapter.toAddressDTO(model.getAddresses())).thenReturn(Arrays.asList(createAddressDTO()));
         final List<PersonDTO> dtoList = classUnderTest.toPeopleDTO(personList);
         Mockito.verifyZeroInteractions(mockPersonService);
 
@@ -81,7 +74,6 @@ public class TestPersonAdapter {
         PersonDTO dto = createPersonDTO();
         dto.setId(0L);
         when(mockPersonService.getPerson(dto.getId())).thenReturn(null);
-        when(mockAddressAdapter.toAddress(dto.getAddresses())).thenReturn(Arrays.asList(createAddress()));
         final Person model = classUnderTest.toPerson(dto);
         Mockito.validateMockitoUsage();
         verifyFields(dto, model);
@@ -93,7 +85,6 @@ public class TestPersonAdapter {
         PersonDTO dto = createPersonDTO();
         dto.setId(0L);
         when(mockPersonService.getPerson(dto.getId())).thenReturn(null);
-        when(mockAddressAdapter.toAddress(dto.getAddresses())).thenReturn(Arrays.asList(createAddress()));
 
         final List<PersonDTO> personDTOList = new ArrayList<>();
         personDTOList.add(dto);
@@ -111,7 +102,6 @@ public class TestPersonAdapter {
 
         Person originalFromDB = createPerson();
 
-        when(mockAddressAdapter.toAddress(dto.getAddresses())).thenReturn(Arrays.asList(createAddress()));
         when(mockPersonService.getPerson(dto.getId())).thenReturn(originalFromDB);
         final Person model = classUnderTest.toPerson(dto);
         verifyFields(dto, model);
@@ -121,20 +111,6 @@ public class TestPersonAdapter {
         Assert.assertThat(model.getFirstName(), Matchers.equalToIgnoringWhiteSpace(dto.getFirstName()));
         Assert.assertThat(model.getMiddleName(), Matchers.equalToIgnoringWhiteSpace(dto.getMiddleName()));
         Assert.assertThat(model.getLastName(), Matchers.equalToIgnoringWhiteSpace(dto.getLastName()));
-        Assert.assertThat(model.getBirthDate(), Matchers.equalTo(dto.getBirthDate()));
-
-        Assert.assertThat(model.getAddresses().get(0).getFirstLine(), Matchers.equalToIgnoringWhiteSpace(dto.getAddresses().get(0).getFirstLine()));
-    }
-
-    private Address createAddress() {
-        Address address = new Address();
-        address.setFirstLine("1 New Street");
-        address.setSecondLine("");
-        address.setTown("Belfast");
-        address.setPostCode("BT1 1AB");
-        address.setId(1L);
-
-        return address;
     }
 
     private Person createPerson() {
@@ -142,22 +118,11 @@ public class TestPersonAdapter {
         person.setFirstName("Bob");
         person.setMiddleName("Chaz");
         person.setLastName("Davids");
-        person.setBirthDate(new Date());
-        person.getAddresses().add(createAddress());
+        person.setBirthDate(LocalDate.now());
         person.setId(1L);
         return person;
     }
 
-    private AddressDTO createAddressDTO() {
-        AddressDTO dto = new AddressDTO();
-        dto.setFirstLine("1 New Street");
-        dto.setSecondLine("");
-        dto.setTown("Belfast");
-        dto.setPostCode("BT1 1AB");
-        dto.setId(1L);
-
-        return dto;
-    }
 
     private PersonDTO createPersonDTO() {
         PersonDTO dto = new PersonDTO();
@@ -165,7 +130,6 @@ public class TestPersonAdapter {
         dto.setMiddleName("Chaz");
         dto.setLastName("Davids");
         dto.setBirthDate(new Date());
-        dto.getAddresses().add(createAddressDTO());
         return dto;
     }
 }

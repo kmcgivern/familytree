@@ -2,11 +2,8 @@ package uk.co.kstech.rest.service.person;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import uk.co.kstech.adapter.address.AddressAdapter;
 import uk.co.kstech.adapter.person.PersonAdapter;
-import uk.co.kstech.dto.address.AddressDTO;
 import uk.co.kstech.dto.person.PersonDTO;
-import uk.co.kstech.model.address.Address;
 import uk.co.kstech.model.person.Person;
 import uk.co.kstech.service.*;
 

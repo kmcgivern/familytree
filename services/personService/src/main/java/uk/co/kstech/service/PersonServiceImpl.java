@@ -2,9 +2,7 @@ package uk.co.kstech.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import uk.co.kstech.dao.address.AddressDao;
 import uk.co.kstech.dao.person.PersonDao;
-import uk.co.kstech.model.address.Address;
 import uk.co.kstech.model.person.Person;
 import uk.co.kstech.service.message.ConstraintError;
 

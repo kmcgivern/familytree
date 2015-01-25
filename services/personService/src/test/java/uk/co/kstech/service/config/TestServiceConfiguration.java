@@ -7,10 +7,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import uk.co.kstech.dao.JPAConfiguration;
-import uk.co.kstech.dao.address.AddressDao;
 import uk.co.kstech.dao.person.PersonDao;
-import uk.co.kstech.service.AddressService;
-import uk.co.kstech.service.AddressServiceImpl;
 
 /**
  * Created by KMcGivern on 10/04/2014.
@@ -20,12 +17,6 @@ import uk.co.kstech.service.AddressServiceImpl;
 @EnableAutoConfiguration
 @ComponentScan("uk.co.kstech.service")
 public class TestServiceConfiguration {
-
-    @Bean
-    public AddressDao getAddressDao() {
-
-        return Mockito.mock(AddressDao.class);
-    }
 
     @Bean
     public PersonDao getPersonDao() {

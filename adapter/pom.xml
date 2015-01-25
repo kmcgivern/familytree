@@ -15,7 +15,7 @@
     <dependencies>
         <dependency>
             <groupId>springhibernate</groupId>
-            <artifactId>addressService</artifactId>
+            <artifactId>personService</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>

@@ -7,7 +7,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import uk.co.kstech.adapter.config.AdapterConfig;
-import uk.co.kstech.service.AddressService;
 import uk.co.kstech.service.PersonService;
 
 /**
@@ -19,10 +18,6 @@ import uk.co.kstech.service.PersonService;
 @ComponentScan("uk.co.kstech.adapter.*")
 public class TestAdapterConfig {
 
-    @Bean
-    public AddressService getAddressService() {
-        return Mockito.mock(AddressService.class);
-    }
 
     @Bean
     public PersonService getPersonService() {

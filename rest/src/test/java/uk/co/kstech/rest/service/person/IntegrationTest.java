@@ -17,14 +17,10 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import uk.co.kstech.adapter.address.AddressAdapter;
 import uk.co.kstech.adapter.person.PersonAdapter;
-import uk.co.kstech.dto.address.AddressDTO;
 import uk.co.kstech.dto.person.PersonDTO;
-import uk.co.kstech.model.address.Address;
 import uk.co.kstech.model.person.Person;
 import uk.co.kstech.rest.config.TestRestConfig;
-import uk.co.kstech.rest.service.address.AddressService;
 import uk.co.kstech.rest.service.utilities.DtoBuilder;
 import uk.co.kstech.rest.service.utilities.JsonUtils;
 

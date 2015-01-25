@@ -1,7 +1,6 @@
 package uk.co.kstech.adapter.person;
 
 import uk.co.kstech.dto.person.PersonDTO;
-import uk.co.kstech.model.address.Address;
 import uk.co.kstech.model.person.Person;
 
 import java.util.List;

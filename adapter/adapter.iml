@@ -10,7 +10,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="addressService" />
+    <orderEntry type="module" module-name="personService" />
     <orderEntry type="library" name="Maven: org.mockito:mockito-all:1.8.4" level="project" />
     <orderEntry type="module" module-name="dao" />
     <orderEntry type="module" module-name="model" />

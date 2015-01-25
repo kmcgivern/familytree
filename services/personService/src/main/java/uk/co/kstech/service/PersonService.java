@@ -1,6 +1,5 @@
 package uk.co.kstech.service;
 
-import uk.co.kstech.model.address.Address;
 import uk.co.kstech.model.person.Person;
 
 import java.util.List;

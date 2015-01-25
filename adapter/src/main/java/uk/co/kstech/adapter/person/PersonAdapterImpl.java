@@ -2,12 +2,14 @@ package uk.co.kstech.adapter.person;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import uk.co.kstech.adapter.address.AddressAdapter;
 import uk.co.kstech.dto.person.PersonDTO;
 import uk.co.kstech.model.person.Person;
 import uk.co.kstech.service.PersonService;
 
+import java.time.Instant;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -15,9 +17,6 @@ import java.util.List;
  */
 @Component
 public class PersonAdapterImpl implements PersonAdapter {
-
-    @Autowired
-    private AddressAdapter addressAdapter;
 
     @Autowired
     private PersonService personService;
@@ -37,8 +36,7 @@ public class PersonAdapterImpl implements PersonAdapter {
         person.setFirstName(dto.getFirstName());
         person.setMiddleName(dto.getMiddleName());
         person.setLastName(dto.getLastName());
-        person.setBirthDate(dto.getBirthDate());
-        person.setAddresses(addressAdapter.toAddress(dto.getAddresses()));
+        person.setBirthDate(dto.getBirthDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
         return person;
     }
 
@@ -48,8 +46,9 @@ public class PersonAdapterImpl implements PersonAdapter {
         dto.setFirstName(model.getFirstName());
         dto.setMiddleName(model.getMiddleName());
         dto.setLastName(model.getLastName());
-        dto.setBirthDate(model.getBirthDate());
-        dto.setAddresses(addressAdapter.toAddressDTO(model.getAddresses()));
+        Instant instant = model.getBirthDate().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant();
+        Date res = Date.from(instant);
+        dto.setBirthDate(res);
         dto.setId(model.getId());
         return dto;
     }

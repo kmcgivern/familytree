@@ -4,8 +4,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.CommonAnnotationBeanPostProcessor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import uk.co.kstech.service.AddressService;
-import uk.co.kstech.service.AddressServiceImpl;
+import uk.co.kstech.service.PersonService;
+import uk.co.kstech.service.PersonServiceImpl;
 
 /**
  * Created by KMcGivern on 10/04/2014.
@@ -19,8 +19,4 @@ public class ServiceConfiguration {
         return new CommonAnnotationBeanPostProcessor();
     }
 
-//    @Bean
-//    public AddressService getAddressService() {
-//        return new AddressServiceImpl();
-//    }
 }
