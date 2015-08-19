@@ -14,26 +14,15 @@ import java.util.Set;
  */
 public class PersonDTO extends BaseDTO {
 
-
     @NotNull
-    private ManDTO father;
-
-    @NotNull
-    private WomanDTO mother;
-
-    @NotNull
-    @Column(name = "firstName")
     private String firstName;
 
-    @Column(name = "middleName")
     private String middleName;
 
     @NotNull
-    @Column(name = "lastName")
     private String lastName;
 
     @NotNull
-    @Column(name = "birthDate")
     @Type(type="date")
     private Date birthDate;
 
@@ -70,22 +59,5 @@ public class PersonDTO extends BaseDTO {
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
-
-    public ManDTO getFather() {
-        return father;
-    }
-
-    public void setFather(ManDTO father) {
-        this.father = father;
-    }
-
-    public WomanDTO getMother() {
-        return mother;
-    }
-
-    public void setMother(WomanDTO mother) {
-        this.mother = mother;
-    }
-
 
 }

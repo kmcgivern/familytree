@@ -56,15 +56,6 @@ public class PersonRepositoryTest {
         notNull(saved.getId());
     }
 
-    @Test
-    public void shouldSaveRelationship() throws Exception {
-        final Person child = classUnderTest.save(createChild());
-        final Person father = classUnderTest.save(createFather(child));
-        notNull(child.getId());
-        notNull(father.getId());
-        notNull(father.getChildren().iterator().next().getId());
-        assertThat(father.getChildren().iterator().next().getId(), IsEqual.equalTo(child.getId()));
-    }
 
     @Test
     public void shouldRetrievePerson() {
@@ -76,61 +67,20 @@ public class PersonRepositoryTest {
         notNull(loadedPerson.getId());
     }
 
-    @Test
-    public void shouldGetAllChildrenForParent(){
-        final Person father = classUnderTest.save(createFather());
-        father.addChild(createChild("John", "Peter", father.getLastName(), LocalDate.of(2000, Month.NOVEMBER, 20), true));
-        father.addChild(createChild("James", "Paul", father.getLastName(), LocalDate.of(2002, Month.JANUARY, 15), true));
-        classUnderTest.save(father);
-        assertThat(father.getChildren().size(), IsEqual.equalTo(2));
-    }
 
     private Person savePerson() {
-        final Person saved = classUnderTest.save(createFather());
+        final Person saved = classUnderTest.save(createPerson());
         return saved;
     }
 
-    private Person createFather() {
-        Person Person = new Person();
-        Person.setFirstName("Bob");
-        Person.setMiddleName("Chaz");
-        Person.setLastName("Davids");
-        Person.setMale(true);
-        Person.setBirthDate(LocalDate.of(1980, Month.JANUARY, 20));
-        return Person;
-    }
-
-    private Person createFather(Person child) {
-        Person Person = new Person();
-        Person.setFirstName("Bob");
-        Person.setMiddleName("Chaz");
-        Person.setLastName("Davids");
-        Person.setMale(true);
-        Person.setBirthDate(LocalDate.of(1980, Month.JANUARY, 20));
-        Person.addChild(child);
-        return Person;
-    }
-
-    private Person createChild() {
-
-        Person child = new Person();
-        child.setFirstName("Dave");
-        child.setMiddleName("Chaz");
-        child.setLastName("Davids");
-        child.setMale(true);
-        child.setBirthDate(LocalDate.of(2000, Month.NOVEMBER, 20));
-        return child;
-    }
-
-    private Person createChild(final String first, final String middle, final String last, final LocalDate dob, final boolean isMale) {
-
-        Person child = new Person();
-        child.setFirstName(first);
-        child.setMiddleName(middle);
-        child.setLastName(last);
-        child.setMale(isMale);
-        child.setBirthDate(dob);
-        return child;
+    private Person createPerson() {
+        Person person = new Person();
+        person.setFirstName("Bob");
+        person.setMiddleName("Chaz");
+        person.setLastName("Davids");
+        person.setMale(true);
+        person.setBirthDate(LocalDate.of(1980, Month.JANUARY, 20));
+        return person;
     }
 
 }

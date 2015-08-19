@@ -17,7 +17,7 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import uk.co.kstech.dao.person.PersonDao;
-import uk.co.kstech.dao.person.UnionDao;
+import uk.co.kstech.dao.person.RelationshipDao;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
@@ -27,7 +27,7 @@ import java.util.Map;
 
 @Configuration
 @EnableJpaRepositories(basePackages = "uk.co.kstech.dao",
-        includeFilters = @ComponentScan.Filter(value = {UnionDao.class, PersonDao.class}, type = FilterType.ASSIGNABLE_TYPE))
+        includeFilters = @ComponentScan.Filter(value = {RelationshipDao.class, PersonDao.class}, type = FilterType.ASSIGNABLE_TYPE))
 @EnableTransactionManagement
 @PropertySource("classpath:/application.properties")
 public class JPAConfiguration {

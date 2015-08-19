@@ -6,7 +6,7 @@ sample spring hibernate project for reference
 Uses Spring Boot so to run do the following
 
 at springhibernate directory level
-mvn cleaninstall
+mvn clean install
 
 cd rest
 mvn spring-boot:run
