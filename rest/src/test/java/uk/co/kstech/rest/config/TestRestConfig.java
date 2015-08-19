@@ -1,10 +1,11 @@
 package uk.co.kstech.rest.config;
 
 import org.mockito.Mockito;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+
 import uk.co.kstech.adapter.person.PersonAdapter;
-import uk.co.kstech.rest.entry.Application;
 import uk.co.kstech.rest.service.person.PersonService;
 import uk.co.kstech.rest.service.person.RestPersonService;
 import uk.co.kstech.rest.service.utilities.JsonUtils;

@@ -1,13 +1,17 @@
 package uk.co.kstech.rest.service.person;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
 import uk.co.kstech.adapter.person.PersonAdapter;
 import uk.co.kstech.dto.person.PersonDTO;
 import uk.co.kstech.model.person.Person;
-import uk.co.kstech.service.*;
-
-import java.util.List;
 
 /**
  * Created by KMcGivern on 7/17/2014.
@@ -23,14 +27,14 @@ public class RestPersonService implements PersonService{
     private uk.co.kstech.service.PersonService personService;
 
     @Override
-    @RequestMapping(method = RequestMethod.GET, produces = "application/json")
-    public PersonDTO getPerson(@RequestParam(value = "Id", required = true) long Id) {
-        final Person person = personService.getPerson(Id);
+    @RequestMapping(value = "/{personId}", method = RequestMethod.GET, produces = "application/json")
+    public PersonDTO getPerson(@PathVariable long personId) {
+        final Person person = personService.getPerson(personId);
         PersonDTO dto = null;
         if (personFound(person)) {
             dto = personAdapter.toPersonDTO(person);
         } else {
-            throw new PersonNotFoundException("Could not find Person for the given Person ID:" + Id);
+            throw new PersonNotFoundException("Could not find Person for the given Person ID:" + personId);
         }
         return dto;
     }

@@ -6,14 +6,16 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.Arrays;
-
 /**
  * Created by KMcGivern on 25/04/2014.
  */
 @Configuration
 @EnableAutoConfiguration
-@ComponentScan("uk.co.kstech.*")
+@ComponentScan( 
+		basePackages = {"uk.co.kstech.*"} 
+//	    useDefaultFilters = false,
+//	    excludeFilters = {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = PersonServiceImpl.class)},
+	    )
 public class Application {
 
     public static void main(String[] args) {

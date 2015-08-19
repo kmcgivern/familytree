@@ -106,7 +106,7 @@ public class IntegrationTest {
         when(personAdapter.toPersonDTO(person)).thenReturn(dto);
         when(mockPersonService.getPerson(1)).thenReturn(person);
 
-        this.mockMvc.perform(get("/people?Id=1")).andExpect(status().isOk());
+        this.mockMvc.perform(get("/people/1")).andExpect(status().isOk());
         Mockito.validateMockitoUsage();
     }
 
