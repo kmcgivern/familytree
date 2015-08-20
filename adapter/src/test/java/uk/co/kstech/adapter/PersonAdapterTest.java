@@ -15,12 +15,10 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import uk.co.kstech.adapter.person.PersonAdapter;
+import uk.co.kstech.adapter.person.PersonAdapterImpl;
 import uk.co.kstech.dto.person.PersonDTO;
 import uk.co.kstech.model.person.Person;
 import uk.co.kstech.service.PersonService;
@@ -28,20 +26,17 @@ import uk.co.kstech.service.PersonService;
 /**
  * Created by KMcGivern on 7/17/2014.
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {TestAdapterConfig.class})
-public class TestPersonAdapter {
+@RunWith(MockitoJUnitRunner.class)
+public class PersonAdapterTest {
 
     @InjectMocks
-    @Autowired
-    private PersonAdapter classUnderTest;
+    private PersonAdapter classUnderTest = new PersonAdapterImpl();
 
     @Mock
     private PersonService mockPersonService;
 
     @Before
     public void initMocks() {
-        MockitoAnnotations.initMocks(this);
     }
 
     @Test

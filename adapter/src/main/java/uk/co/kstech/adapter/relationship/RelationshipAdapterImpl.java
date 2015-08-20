@@ -42,6 +42,7 @@ public class RelationshipAdapterImpl implements RelationshipAdapter {
 		Person p2 = personService.getPerson(model.getPersonID2());
 		PersonDTO p2Dto = personAdapter.toPersonDTO(p2);
 		
+		dto.setId(model.getId());
 		dto.setPerson1(p1Dto);
 		dto.setPerson2(p2Dto);
 		dto.setRelationshipType(model.getRelationshipType().toString());

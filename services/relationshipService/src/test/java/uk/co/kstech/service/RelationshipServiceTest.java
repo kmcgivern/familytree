@@ -9,10 +9,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,27 +17,25 @@ import uk.co.kstech.dao.person.RelationshipDao;
 import uk.co.kstech.model.person.Relationship;
 import uk.co.kstech.model.person.Relationship.RelationshipType;
 import uk.co.kstech.service.RelationshipServiceImpl.RelationshipConstraintViolationException;
-import uk.co.kstech.service.config.TestServiceConfiguration;
+import autofixture.publicinterface.Fixture;
 
 /**
  * Created by KMcGivern on 7/17/2014.
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {TestServiceConfiguration.class})
+@RunWith(MockitoJUnitRunner.class)
 @Transactional
 @TransactionConfiguration(defaultRollback = true)
 public class RelationshipServiceTest {
 
     @InjectMocks
-    @Autowired
-    private RelationshipService classUnderTest;
+    private RelationshipService classUnderTest = new RelationshipServiceImpl();;
 
     @Mock
     private RelationshipDao mockDao;
 
     @Before
     public void initMocks() {
-        MockitoAnnotations.initMocks(this);
+    	RelationshipServiceImpl.setUpValidation();
     }
 
     @Test
@@ -91,9 +86,8 @@ public class RelationshipServiceTest {
     }
 
     private Relationship createRelationship() {
-    	Relationship r = new Relationship();
-        r.setPersonID1(1L);
-        r.setPersonID2(2L);
+    	Fixture fixture = new Fixture();
+    	Relationship r = fixture.create(Relationship.class);
         r.setRelationshipType(RelationshipType.BROTHER);
         return r;
     }
