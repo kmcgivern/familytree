@@ -12,17 +12,25 @@ import uk.co.kstech.model.person.Relationship.RelationshipType;
 import uk.co.kstech.service.PersonService;
 import uk.co.kstech.service.RelationshipService;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
 @Component
 public class RelationshipAdapterImpl implements RelationshipAdapter {
 
-	@Autowired
 	private RelationshipService relationshipService;
 	
-	@Autowired
 	private PersonService personService;
 	
-	@Autowired
 	private PersonAdapter personAdapter;
+
+	@Autowired
+	public RelationshipAdapterImpl(RelationshipService relationshipService, PersonService personService, PersonAdapter personAdapter){
+        this.relationshipService = relationshipService;
+		this.personService = personService;
+		this.personAdapter = personAdapter;
+	}
 
 	@Override
 	public Relationship toRelationship(final RelationshipDTO dto) {
@@ -30,7 +38,9 @@ public class RelationshipAdapterImpl implements RelationshipAdapter {
 		relationship.setPersonID1(dto.getPerson1().getId());
 		relationship.setPersonID2(dto.getPerson2().getId());
 		relationship.setRelationshipType(RelationshipType.valueOf(dto.getRelationshipType().toUpperCase()));
-		relationship.setDateOfMarriage(dto.getDateOfMarriage());
+		Calendar cal = GregorianCalendar.getInstance();
+		cal.setTime(dto.getDateOfMarriage());
+		relationship.setDateOfMarriage(cal);
         return relationship;
 	}
 
@@ -46,16 +56,17 @@ public class RelationshipAdapterImpl implements RelationshipAdapter {
 		dto.setPerson1(p1Dto);
 		dto.setPerson2(p2Dto);
 		dto.setRelationshipType(model.getRelationshipType().toString());
-		dto.setDateOfMarriage(model.getDateOfMarriage());
+		Date res = Date.from(model.getDateOfMarriage().toInstant());
+		dto.setDateOfMarriage(res);
 		return dto;
 	}
 	
 	  private Relationship getRelationship(final RelationshipDTO dto) {
-		  Relationship person = relationshipService.getRelationship(dto.getId());
-	        if (person == null) {
-	            person = new Relationship();
+		  Relationship relationship = relationshipService.getRelationship(dto.getId());
+	        if (relationship == null) {
+                relationship = new Relationship();
 	        }
-	        return person;
+	        return relationship;
 	    }
 
 }

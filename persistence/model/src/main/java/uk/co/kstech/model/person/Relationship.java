@@ -1,24 +1,17 @@
 package uk.co.kstech.model.person;
 
-import org.hibernate.annotations.Type;
+import org.springframework.data.jpa.domain.AbstractPersistable;
 
-import uk.co.kstech.model.DomainObject;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-
-import java.util.Date;
+import java.util.Calendar;
 
 /**
  * Created by KMcGivern on 08/11/2014.
  */
 @Entity(name = "RELATIONSHIP")
 @Table(name = "tblRelationship")
-public class Relationship extends DomainObject{
+public class Relationship extends AbstractPersistable<Long> {
 
     @NotNull
     @Column(name = "personID1")
@@ -34,8 +27,19 @@ public class Relationship extends DomainObject{
     private RelationshipType relationshipType;
    
     @Column(name = "dateOfMarriage", nullable = true)
-    @Type(type="date")
-    private Date dateOfMarriage;
+    @Temporal(TemporalType.DATE)
+    private Calendar dateOfMarriage;
+
+    public Relationship() {
+        this(null);
+    }
+
+    /**
+     * Creates a new Relationship instance.
+     */
+    public Relationship(Long id) {
+        this.setId(id);
+    }
 
     
     public Long getPersonID1() {
@@ -54,11 +58,11 @@ public class Relationship extends DomainObject{
         this.personID2 = personID2;
     }
 
-    public Date getDateOfMarriage() {
+    public Calendar getDateOfMarriage() {
         return dateOfMarriage;
     }
 
-    public void setDateOfMarriage(Date dateOfMarriage) {
+    public void setDateOfMarriage(Calendar dateOfMarriage) {
         this.dateOfMarriage = dateOfMarriage;
     }
     

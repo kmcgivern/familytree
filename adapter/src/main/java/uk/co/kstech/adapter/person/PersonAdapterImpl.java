@@ -6,11 +6,7 @@ import uk.co.kstech.dto.person.PersonDTO;
 import uk.co.kstech.model.person.Person;
 import uk.co.kstech.service.PersonService;
 
-import java.time.Instant;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by KMcGivern on 7/17/2014.
@@ -18,8 +14,12 @@ import java.util.List;
 @Component
 public class PersonAdapterImpl implements PersonAdapter {
 
-    @Autowired
     private PersonService personService;
+
+    @Autowired
+    public PersonAdapterImpl(PersonService personService){
+        this.personService = personService;
+    }
 
     @Override
     public List<Person> toPeople(List<PersonDTO> list) {
@@ -36,7 +36,9 @@ public class PersonAdapterImpl implements PersonAdapter {
         person.setFirstName(dto.getFirstName());
         person.setMiddleName(dto.getMiddleName());
         person.setLastName(dto.getLastName());
-        person.setBirthDate(dto.getBirthDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+        Calendar cal = GregorianCalendar.getInstance();
+        cal.setTime(dto.getBirthDate());
+        person.setBirthDate(cal);
         return person;
     }
 
@@ -46,8 +48,7 @@ public class PersonAdapterImpl implements PersonAdapter {
         dto.setFirstName(model.getFirstName());
         dto.setMiddleName(model.getMiddleName());
         dto.setLastName(model.getLastName());
-        Instant instant = model.getBirthDate().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant();
-        Date res = Date.from(instant);
+        Date res = Date.from(model.getBirthDate().toInstant());
         dto.setBirthDate(res);
         dto.setId(model.getId());
         return dto;

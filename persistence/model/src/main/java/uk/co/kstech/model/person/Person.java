@@ -1,25 +1,22 @@
 package uk.co.kstech.model.person;
 
-import java.time.LocalDate;
+import org.springframework.data.jpa.domain.AbstractPersistable;
+import org.springframework.validation.annotation.Validated;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-
-import org.hibernate.annotations.Type;
-
-import uk.co.kstech.model.DomainObject;
+import java.util.Calendar;
 
 /**
  * Created by KMcGivern on 7/17/2014.
  */
 @Entity(name = "PERSON")
 @Table(name = "tblPerson")
-public class Person extends DomainObject {
+@Validated
+public class Person extends AbstractPersistable<Long> {
 
     @NotNull
-    @Column(name = "firstName")
+    @Column(name = "firstName", nullable = false)
     private String firstName;
 
     @Column(name = "middleName")
@@ -31,30 +28,41 @@ public class Person extends DomainObject {
 
     @NotNull
     @Column(name = "birthDate")
-    @Type(type = "date")
-    private LocalDate birthDate;
+    @Temporal(TemporalType.DATE)
+    private Calendar birthDate;
 
     @Column(name = "dateDied")
-    @Type(type = "date")
-    private LocalDate dateDied;
+    @Temporal(TemporalType.DATE)
+    private Calendar dateDied;
 
     @NotNull
     @Column(name = "isMale")
     private boolean isMale;
 
-    public LocalDate getBirthDate() {
+    public Person() {
+        this(null);
+    }
+
+    /**
+     * Creates a new Person instance.
+     */
+    public Person(Long id) {
+        this.setId(id);
+    }
+
+    public Calendar getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(LocalDate birthDate) {
+    public void setBirthDate(Calendar birthDate) {
         this.birthDate = birthDate;
     }
 
-    public LocalDate getDateDied() {
+    public Calendar getDateDied() {
         return dateDied;
     }
 
-    public void setDateDied(LocalDate dateDied) {
+    public void setDateDied(Calendar dateDied) {
         this.dateDied = dateDied;
     }
 

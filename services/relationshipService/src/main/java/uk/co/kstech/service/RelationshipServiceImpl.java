@@ -2,10 +2,7 @@ package uk.co.kstech.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import uk.co.kstech.dao.person.PersonDao;
-import uk.co.kstech.dao.person.RelationshipDao;
-import uk.co.kstech.model.person.Person;
+import uk.co.kstech.dao.person.RelationshipRepository;
 import uk.co.kstech.model.person.Relationship;
 import uk.co.kstech.service.message.ConstraintError;
 
@@ -14,7 +11,6 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -33,28 +29,32 @@ public class RelationshipServiceImpl implements RelationshipService{
         validator = factory.getValidator();
     }
 
+    private RelationshipRepository relationshipRepository;
+
     @Autowired
-    private RelationshipDao relationshipDao;
+    public RelationshipServiceImpl(RelationshipRepository relationshipRepository){
+        this.relationshipRepository = relationshipRepository;
+    }
 
     @Override
     public Relationship getRelationship(long id) {
-            return relationshipDao.findOne(id);
+            return relationshipRepository.findOne(id);
     }
     @Override
     public Relationship createRelationship(Relationship relationship) {
         validate(relationship);
-        return relationshipDao.save(relationship);
+        return relationshipRepository.save(relationship);
     }
 
     @Override
     public Relationship updateRelationship(Relationship relationship) {
         validate(relationship);
-        return relationshipDao.save(relationship);
+        return relationshipRepository.save(relationship);
     }
 
     @Override
     public void deleteRelationship(Relationship relationship) {
-        relationshipDao.delete(relationship);
+        relationshipRepository.delete(relationship);
     }
 
     private void validate(final Relationship relationship) {

@@ -2,7 +2,7 @@ package uk.co.kstech.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import uk.co.kstech.dao.person.PersonDao;
+import uk.co.kstech.dao.person.PersonRepository;
 import uk.co.kstech.model.person.Person;
 import uk.co.kstech.service.message.ConstraintError;
 
@@ -29,34 +29,38 @@ public class PersonServiceImpl implements PersonService{
         validator = factory.getValidator();
     }
 
+    private PersonRepository personRepository;
+
     @Autowired
-    private PersonDao personDao;
+    public PersonServiceImpl(PersonRepository personRepository){
+        this.personRepository = personRepository;
+    }
 
     @Override
     public Person getPerson(long id) {
-            return personDao.findOne(id);
+            return personRepository.findOne(id);
     }
 
     @Override
     public List<Person> getPeople() {
-        return makeList(personDao.findAll());
+        return makeList(personRepository.findAll());
     }
 
     @Override
     public Person createPerson(Person person) {
         validate(person);
-        return personDao.save(person);
+        return personRepository.save(person);
     }
 
     @Override
     public Person updatePerson(Person person) {
         validate(person);
-        return personDao.save(person);
+        return personRepository.save(person);
     }
 
     @Override
     public void deletePerson(Person person) {
-        personDao.delete(person);
+        personRepository.delete(person);
     }
 
     private void validate(final Person person) {

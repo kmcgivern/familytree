@@ -21,6 +21,8 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<skip.unit.tests>false</skip.unit.tests>
+		<spring.version>4.3.5.RELEASE</spring.version>
+		<spring.boot.version>1.4.3.RELEASE</spring.boot.version>
 	</properties>
 
 	<dependencies>
@@ -28,18 +30,18 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
-			<version>1.0.2.RELEASE</version>
+			<version>${spring.boot.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
-			<version>1.0.2.RELEASE</version>
+			<version>${spring.boot.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
-			<version>1.0.2.RELEASE</version>
+			<version>${spring.boot.version}</version>
 		</dependency>
 
 		<dependency>
@@ -55,16 +57,28 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjweaver</artifactId>
+			<version>1.8.9</version>
+		</dependency>
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjrt</artifactId>
+			<version>1.8.9</version>
+		</dependency>
+
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
-			<version>1.0.2.RELEASE</version>
+			<version>${spring.boot.version}</version>
 			<scope>test</scope>
 		</dependency>
 
 		<dependency>
-			<groupId>com.github.autofixture</groupId>
-			<artifactId>autofixturegenerator</artifactId>
-			<version>1.0.5</version>
+			<groupId>com.flextrade.jfixture</groupId>
+			<artifactId>jfixture</artifactId>
+			<version>2.5.0</version>
+			<scope>test</scope>
 		</dependency>
 
 

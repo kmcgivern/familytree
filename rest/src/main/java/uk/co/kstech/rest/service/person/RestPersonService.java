@@ -57,9 +57,8 @@ public class RestPersonService implements PersonService{
     @Override
     @RequestMapping(method = RequestMethod.PUT, consumes = "application/json", produces = "application/json")
     public PersonDTO updatePerson(@RequestBody(required = true)PersonDTO dto) {
-        final Person addressFromDb = personService.getPerson(dto.getId());
+        final Person fromDb = personService.getPerson(dto.getId());
         final Person updated = personAdapter.toPerson(dto);
-        updated.setVersion(addressFromDb.getVersion());
         personService.updatePerson(updated);
         return personAdapter.toPersonDTO(updated);
     }

@@ -1,42 +1,57 @@
 package uk.co.kstech.adapter;
 
-import static org.mockito.Mockito.when;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
-
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import uk.co.kstech.adapter.person.PersonAdapter;
 import uk.co.kstech.adapter.person.PersonAdapterImpl;
 import uk.co.kstech.dto.person.PersonDTO;
 import uk.co.kstech.model.person.Person;
 import uk.co.kstech.service.PersonService;
 
+import java.util.*;
+
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.when;
+
 /**
  * Created by KMcGivern on 7/17/2014.
  */
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration
 public class PersonAdapterTest {
 
-    @InjectMocks
-    private PersonAdapter classUnderTest = new PersonAdapterImpl();
+    @Configuration
+    public static class Config {
 
-    @Mock
+        @Bean
+        public PersonAdapter getPersonAdapter() {
+            return new PersonAdapterImpl(getPersonService());
+        }
+
+        @Bean
+        public PersonService getPersonService() {
+            return Mockito.mock(PersonService.class);
+        }
+    }
+
+    @Autowired
+    private PersonAdapter classUnderTest;
+
+    @Autowired
     private PersonService mockPersonService;
 
     @Before
     public void initMocks() {
+        reset(mockPersonService);
     }
 
     @Test
@@ -109,12 +124,12 @@ public class PersonAdapterTest {
     }
 
     private Person createPerson() {
-        Person person = new Person();
+        Person person = new Person(1L);
         person.setFirstName("Bob");
         person.setMiddleName("Chaz");
         person.setLastName("Davids");
-        person.setBirthDate(LocalDate.now());
-        person.setId(1L);
+        Calendar cal = GregorianCalendar.getInstance();
+        person.setBirthDate(cal);
         return person;
     }
 

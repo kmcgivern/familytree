@@ -1,23 +1,18 @@
 package uk.co.kstech.dao.person;
 
 import org.hamcrest.core.IsEqual;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ActiveProfiles;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.test.context.junit4.SpringRunner;
 import uk.co.kstech.dao.TestJpaConfig;
 import uk.co.kstech.model.person.Person;
 
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
-import java.time.LocalDate;
-import java.time.Month;
+import javax.validation.ConstraintViolationException;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import static org.junit.Assert.assertThat;
 import static org.springframework.util.Assert.notNull;
@@ -26,28 +21,33 @@ import static org.springframework.util.Assert.notNull;
 /**
  * Created by KMcGivern on 7/17/2014.
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ActiveProfiles("test")
+@RunWith(SpringRunner.class)
+//@SpringBootTest
 @ContextConfiguration(classes = {TestJpaConfig.class})
-@Transactional
-@TransactionConfiguration(defaultRollback = true)
+//@Transactional
+//@Rollback
+@DataJpaTest
 public class PersonRepositoryTest {
 
     @Autowired
-    private PersonDao classUnderTest;
-
-    private static Validator validator;
-
-    @BeforeClass
-    public static void setUp() {
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        validator = factory.getValidator();
-    }
+    private PersonRepository classUnderTest;
 
     @Test
     public void databaseIsEmpty() throws Exception {
         long count = classUnderTest.count();
         assertThat(count, IsEqual.equalTo(0L));
+    }
+
+    @Test(expected = ConstraintViolationException.class)
+    public void shouldNotSavePersonWithMissingFields() throws Exception {
+        Person person = new Person();
+        person.setMiddleName("Chaz");
+        person.setMale(true);
+        Calendar birthDate =  GregorianCalendar.getInstance();
+        birthDate.set(1980, 1, 20);
+        person.setBirthDate(birthDate);
+
+        classUnderTest.saveAndFlush(person);
     }
 
     @Test
@@ -79,7 +79,9 @@ public class PersonRepositoryTest {
         person.setMiddleName("Chaz");
         person.setLastName("Davids");
         person.setMale(true);
-        person.setBirthDate(LocalDate.of(1980, Month.JANUARY, 20));
+        Calendar birthDate =  GregorianCalendar.getInstance();
+        birthDate.set(1980, 1, 20);
+        person.setBirthDate(birthDate);
         return person;
     }
 

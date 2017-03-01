@@ -1,9 +1,5 @@
 package uk.co.kstech.rest.service.person;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectReader;
-import com.fasterxml.jackson.databind.ObjectWriter;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,15 +20,11 @@ import uk.co.kstech.rest.config.TestRestConfig;
 import uk.co.kstech.rest.service.utilities.DtoBuilder;
 import uk.co.kstech.rest.service.utilities.JsonUtils;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -88,7 +80,6 @@ public class IntegrationTest {
         PersonDTO dto = DtoBuilder.createPersonDTO();
         dto.setId(1);
         final Person person = DtoBuilder.convertPersonDTO(dto);
-        person.setVersion(1L);
         when(mockPersonService.getPerson(1)).thenReturn(person);
         when(personAdapter.toPerson(dto)).thenReturn(person);
         when(mockPersonService.updatePerson(person)).thenReturn(person);
