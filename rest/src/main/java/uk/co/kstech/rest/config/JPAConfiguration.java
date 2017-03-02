@@ -77,9 +77,10 @@ public class JPAConfiguration {
     public FactoryBean<EntityManagerFactory> entityManagerFactory(final Environment environment, final DataSource dataSource, final JpaVendorAdapter jpaVendorAdapter) {
         final Map<String, String> properties = new HashMap<>();
         properties.put("hibernate.generate_statistics", "false");
-
+        properties.put("hibernate.id.new_generator_mappings", "false");
         if (environment.acceptsProfiles("dev")) {
             properties.put("hibernate.hbm2ddl.auto", "update");
+
         }
 
         final LocalContainerEntityManagerFactoryBean bean = new LocalContainerEntityManagerFactoryBean();

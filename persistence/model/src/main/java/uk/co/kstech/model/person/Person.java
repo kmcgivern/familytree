@@ -11,7 +11,7 @@ import java.util.Calendar;
  * Created by KMcGivern on 7/17/2014.
  */
 @Entity(name = "PERSON")
-@Table(name = "tblPerson")
+@Table(name = "tblperson")
 @Validated
 public class Person extends AbstractPersistable<Long> {
 

@@ -1,17 +1,12 @@
 package uk.co.kstech.rest.service.person;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
 import uk.co.kstech.adapter.person.PersonAdapter;
 import uk.co.kstech.dto.person.PersonDTO;
 import uk.co.kstech.model.person.Person;
+
+import java.util.List;
 
 /**
  * Created by KMcGivern on 7/17/2014.
@@ -64,13 +59,13 @@ public class RestPersonService implements PersonService{
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.DELETE)
-    public void deletePerson(@RequestBody(required = true)long Id) {
-        final Person person = personService.getPerson(Id);
+    @RequestMapping(value = "/{personId}", method = RequestMethod.DELETE)
+    public void deletePerson(@PathVariable long personId) {
+        final Person person = personService.getPerson(personId);
         if (personFound(person)) {
             personService.deletePerson(person);
         } else {
-            throw new PersonNotFoundException("Could not find Person for the given Person ID:" + Id);
+            throw new PersonNotFoundException("Could not find Person for the given Person ID:" + personId);
         }
     }
 

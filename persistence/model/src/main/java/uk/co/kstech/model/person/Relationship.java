@@ -10,7 +10,7 @@ import java.util.Calendar;
  * Created by KMcGivern on 08/11/2014.
  */
 @Entity(name = "RELATIONSHIP")
-@Table(name = "tblRelationship")
+@Table(name = "tblrelationship")
 public class Relationship extends AbstractPersistable<Long> {
 
     @NotNull
