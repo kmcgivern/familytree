@@ -13,6 +13,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import uk.co.kstech.adapter.person.PersonAdapter;
 import uk.co.kstech.adapter.person.PersonAdapterImpl;
+import uk.co.kstech.dto.person.DateRepresentation;
 import uk.co.kstech.dto.person.PersonDTO;
 import uk.co.kstech.model.person.Person;
 import uk.co.kstech.service.PersonService;
@@ -139,7 +140,12 @@ public class PersonAdapterTest {
         dto.setFirstName("Bob");
         dto.setMiddleName("Chaz");
         dto.setLastName("Davids");
-        dto.setBirthDate(new Date());
+        DateRepresentation dr = new DateRepresentation();
+        dr.setYear(1984);
+        dr.setMonth(2);
+        dr.setDay(12);
+
+        dto.setBirthDate(dr);
         return dto;
     }
 }

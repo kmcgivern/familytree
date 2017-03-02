@@ -1,0 +1,25 @@
+management:
+    address: 127.0.0.1
+    port: 9001
+server:
+    port: 9000
+spring:
+    jpa:
+        show-sql: true
+        hibernate:
+            ddl-auto: create-drop
+    properties:
+        hibernate:
+            dialect: org.hibernate.dialect.MySQL5Dialect
+    datasource:
+        driver-class-name: com.mysql.jdbc.Driver
+        password: N@vimed1x!
+        url: jdbc:mysql://localhost/FamilyTree?autoReconnect=true&useSSL=false
+        username: admin
+        connectionPoolInitialSize: 10
+        defaultQueryTimeout: 2
+        maxIdle: 10
+        maxTotal: 20
+        validationQuery: select 1
+        validationQueryTimeout: 2
+        testWhileIdle: true

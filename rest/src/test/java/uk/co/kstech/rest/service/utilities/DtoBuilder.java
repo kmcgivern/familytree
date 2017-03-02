@@ -1,11 +1,10 @@
 package uk.co.kstech.rest.service.utilities;
 
+import uk.co.kstech.dto.person.DateRepresentation;
 import uk.co.kstech.dto.person.PersonDTO;
 import uk.co.kstech.model.person.Person;
 
-import java.time.ZoneId;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 
 /**
@@ -18,7 +17,12 @@ public class DtoBuilder {
         dto.setFirstName("Bob");
         dto.setMiddleName("Chaz");
         dto.setLastName("Davids");
-        dto.setBirthDate(new Date());
+        DateRepresentation dr = new DateRepresentation();
+        dr.setYear(1984);
+        dr.setMonth(2);
+        dr.setDay(12);
+
+        dto.setBirthDate(dr);
         return dto;
     }
 
@@ -29,7 +33,7 @@ public class DtoBuilder {
         person.setMiddleName(dto.getMiddleName());
         person.setLastName(dto.getLastName());
         Calendar cal = GregorianCalendar.getInstance();
-        cal.setTime(dto.getBirthDate());
+        cal.set(dto.getBirthDate().getYear(), dto.getBirthDate().getMonth(), dto.getBirthDate().getDay());
         person.setBirthDate(cal);
         return person;
     }

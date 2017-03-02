@@ -1,11 +1,8 @@
 package uk.co.kstech.dto.person;
 
-import org.hibernate.annotations.Type;
 import uk.co.kstech.dto.BaseDTO;
 
-import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -23,16 +20,15 @@ public class PersonDTO extends BaseDTO {
     private String lastName;
 
     @NotNull
-    @Type(type="date")
-    private Date birthDate;
+    private DateRepresentation birthDate;
 
     private Set<PersonDTO> children = new HashSet<>(0);
 
-    public Date getBirthDate() {
+    public DateRepresentation getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(Date birthDate) {
+    public void setBirthDate(DateRepresentation birthDate) {
         this.birthDate = birthDate;
     }
 

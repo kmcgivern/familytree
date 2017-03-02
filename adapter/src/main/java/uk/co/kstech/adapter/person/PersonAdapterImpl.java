@@ -2,6 +2,7 @@ package uk.co.kstech.adapter.person;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import uk.co.kstech.dto.person.DateRepresentation;
 import uk.co.kstech.dto.person.PersonDTO;
 import uk.co.kstech.model.person.Person;
 import uk.co.kstech.service.PersonService;
@@ -37,7 +38,7 @@ public class PersonAdapterImpl implements PersonAdapter {
         person.setMiddleName(dto.getMiddleName());
         person.setLastName(dto.getLastName());
         Calendar cal = GregorianCalendar.getInstance();
-        cal.setTime(dto.getBirthDate());
+        cal.set(dto.getBirthDate().getYear(), dto.getBirthDate().getMonth(), dto.getBirthDate().getDay());
         person.setBirthDate(cal);
         return person;
     }
@@ -48,8 +49,11 @@ public class PersonAdapterImpl implements PersonAdapter {
         dto.setFirstName(model.getFirstName());
         dto.setMiddleName(model.getMiddleName());
         dto.setLastName(model.getLastName());
-        Date res = Date.from(model.getBirthDate().toInstant());
-        dto.setBirthDate(res);
+        DateRepresentation dr = new DateRepresentation();
+        dr.setYear(model.getBirthDate().get(Calendar.YEAR));
+        dr.setMonth(model.getBirthDate().get(Calendar.MONTH));
+        dr.setDay(model.getBirthDate().get(Calendar.DAY_OF_MONTH));
+        dto.setBirthDate(dr);
         dto.setId(model.getId());
         return dto;
     }
