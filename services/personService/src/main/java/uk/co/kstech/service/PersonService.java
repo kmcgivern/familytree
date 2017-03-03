@@ -15,7 +15,7 @@ public interface PersonService {
 
     Person createPerson(final Person person);
 
-    Person updatePerson(final Person person);
+    Person updatePerson(final Person personToUpdate, final long id);
 
-    void deletePerson(final Person person);
+    void deletePerson(final long id);
 }

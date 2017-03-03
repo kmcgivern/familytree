@@ -3,12 +3,10 @@ package uk.co.kstech.service;
 import com.flextrade.jfixture.annotations.Fixture;
 import com.flextrade.jfixture.rules.FixtureRule;
 import org.hamcrest.Matchers;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,13 +14,18 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import uk.co.kstech.dao.person.PersonRepository;
 import uk.co.kstech.model.person.Person;
+import uk.co.kstech.service.exceptions.InvalidUpdateException;
+import uk.co.kstech.service.exceptions.PersonConstraintViolationException;
+import uk.co.kstech.service.exceptions.PersonNotFoundException;
 
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.List;
 
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.when;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.anyLong;
+import static org.mockito.Mockito.*;
 
 /**
  * Created by KMcGivern on 7/17/2014.
@@ -33,16 +36,16 @@ public class PersonServiceTest {
 
 
     @Configuration
-    public static class Config{
+    public static class Config {
 
         @Bean
-        public PersonService getPersonService(){
+        public PersonService getPersonService() {
             return new PersonServiceImpl(getPersonRepository());
         }
 
         @Bean
-        public PersonRepository getPersonRepository(){
-            return Mockito.mock(PersonRepository.class);
+        public PersonRepository getPersonRepository() {
+            return mock(PersonRepository.class);
         }
     }
 
@@ -65,9 +68,24 @@ public class PersonServiceTest {
 
     @Test
     public void shouldGetPerson() {
-        when(mockDao.findOne(1L)).thenReturn(person);
+        when(mockDao.findOne(anyLong())).thenReturn(person);
+        //act
         classUnderTest.getPerson(1L);
-        Mockito.validateMockitoUsage();
+        validateMockitoUsage();
+    }
+
+    @Test
+    public void shoulRaiseExceptionWhenPersonDoesNotExist() {
+        when(mockDao.findOne(1L)).thenReturn(null);
+        //act
+        try {
+            //act
+            classUnderTest.getPerson(1L);
+        } catch (PersonNotFoundException ex) {
+            assertNotNull(ex);
+        }
+
+        validateMockitoUsage();
     }
 
     @Test
@@ -75,45 +93,94 @@ public class PersonServiceTest {
         List<Person> iterable = new ArrayList();
         iterable.add(person);
         when(mockDao.findAll()).thenReturn(iterable);
+        //act
         final List<Person> people = classUnderTest.getPeople();
-        Mockito.validateMockitoUsage();
-        Assert.assertThat(people.size(), Matchers.equalTo(1));
+        validateMockitoUsage();
+        assertThat(people.size(), Matchers.equalTo(1));
     }
 
     @Test
     public void shouldCreatePerson() {
         when(mockDao.save(person)).thenReturn(person);
+        //act
         classUnderTest.createPerson(person);
-        Mockito.validateMockitoUsage();
+        validateMockitoUsage();
     }
 
-    @Test(expected = PersonServiceImpl.PersonConstraintViolationException.class)
+    @Test(expected = PersonConstraintViolationException.class)
     public void shouldFailValidationOnCreate() {
         person.setFirstName(null);
+        //act
         classUnderTest.createPerson(person);
-        Mockito.verifyZeroInteractions(mockDao);
+        verifyZeroInteractions(mockDao);
     }
 
     @Test
     public void shouldUpdatePerson() {
-        when(mockDao.save(person)).thenReturn(person);
-        classUnderTest.updatePerson(person);
-        Mockito.validateMockitoUsage();
+        Person existing = getPerson(1L);
+        Person update = getPerson(1L);
+        when(mockDao.findOne(existing.getId())).thenReturn(existing);
+        when(mockDao.save(update)).thenReturn(update);
+        //act
+        classUnderTest.updatePerson(update, existing.getId());
+        verify(mockDao, times(1)).save(any(Person.class));
     }
 
-    @Test(expected = PersonServiceImpl.PersonConstraintViolationException.class)
+    @Test
+    public void shouldNotUpdatePersonIfIdsDiffer() {
+        Person existing = getPerson(2L);
+        Person update = getPerson(1L);
+        when(mockDao.findOne(existing.getId())).thenReturn(existing);
+
+        //act
+        try {
+            //act
+            classUnderTest.updatePerson(update, existing.getId());
+        } catch (InvalidUpdateException ex) {
+            assertNotNull(ex);
+        }
+
+        verify(mockDao, never()).save(any(Person.class));
+    }
+
+    @Test(expected = PersonConstraintViolationException.class)
     public void shouldFailValidationOnUpdate() {
-        person.setFirstName(null);
-        classUnderTest.updatePerson(person);
-        Mockito.verifyZeroInteractions(mockDao);
+        Person existing = getPerson(1L);
+        when(mockDao.findOne(existing.getId())).thenReturn(existing);
+        existing.setFirstName(null);
+        //act
+        classUnderTest.updatePerson(existing, existing.getId());
+        verifyZeroInteractions(mockDao);
     }
 
     @Test
     public void shouldDeletePerson() {
-        doNothing().when(mockDao).delete(person);
-        classUnderTest.deletePerson(person);
-        Mockito.validateMockitoUsage();
+        when(mockDao.findOne(anyLong())).thenReturn(person);
+        doNothing().when(mockDao).delete(anyLong());
+        //act
+        classUnderTest.deletePerson(1L);
+        validateMockitoUsage();
     }
 
+    @Test
+    public void shouldThrowExceptionIfPersonDoesNotExistOnDelete() {
+        when(mockDao.findOne(anyLong())).thenReturn(null);
+        try {
+            //act
+            classUnderTest.deletePerson(1L);
+        } catch (PersonNotFoundException ex) {
+            assertNotNull(ex);
+        }
+        verify(mockDao, never()).delete(anyLong());
+    }
+
+    private Person getPerson(long id) {
+        Person p = new Person(id);
+        p.setFirstName("bob");
+        p.setLastName("chaz");
+        p.setMale(true);
+        p.setBirthDate(GregorianCalendar.getInstance());
+        return p;
+    }
 
 }

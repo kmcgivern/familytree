@@ -4,6 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.co.kstech.dao.person.PersonRepository;
 import uk.co.kstech.model.person.Person;
+import uk.co.kstech.service.exceptions.InvalidUpdateException;
+import uk.co.kstech.service.exceptions.PersonConstraintViolationException;
+import uk.co.kstech.service.exceptions.PersonNotFoundException;
 import uk.co.kstech.service.message.ConstraintError;
 
 import javax.annotation.PostConstruct;
@@ -18,8 +21,8 @@ import java.util.Set;
 /**
  * Created by KMcGivern on 7/17/2014.
  */
-@Service(value ="PersonServiceImpl" )
-public class PersonServiceImpl implements PersonService{
+@Service(value = "PersonServiceImpl")
+public class PersonServiceImpl implements PersonService {
 
     private static Validator validator;
 
@@ -32,13 +35,17 @@ public class PersonServiceImpl implements PersonService{
     private PersonRepository personRepository;
 
     @Autowired
-    public PersonServiceImpl(PersonRepository personRepository){
+    public PersonServiceImpl(PersonRepository personRepository) {
         this.personRepository = personRepository;
     }
 
     @Override
     public Person getPerson(long id) {
-            return personRepository.findOne(id);
+        Person found = personRepository.findOne(id);
+        if (found == null) {
+            throw new PersonNotFoundException("Could not find Person for the given ID:" + id);
+        }
+        return found;
     }
 
     @Override
@@ -53,14 +60,22 @@ public class PersonServiceImpl implements PersonService{
     }
 
     @Override
-    public Person updatePerson(Person person) {
-        validate(person);
-        return personRepository.save(person);
+    public Person updatePerson(final Person personToUpdate, final long id) {
+        Person inDb = getPerson(id);
+        if(! inDb.getId().equals(personToUpdate.getId())){
+            throw new InvalidUpdateException(String.format("The Id as the parameter '%s' does match the ID in the person being updated '%s'", id, personToUpdate.getId()) );
+        }
+        validate(personToUpdate);
+        return personRepository.save(personToUpdate);
     }
 
     @Override
-    public void deletePerson(Person person) {
-        personRepository.delete(person);
+    public void deletePerson(final long id) {
+        Person found = personRepository.findOne(id);
+        if (found == null) {
+            throw new PersonNotFoundException(String.format("Could not find Person for the given ID: %s", id) );
+        }
+        personRepository.delete(id);
     }
 
     private void validate(final Person person) {
@@ -88,11 +103,4 @@ public class PersonServiceImpl implements PersonService{
         return errors.toString();
     }
 
-    class PersonConstraintViolationException extends RuntimeException {
-
-        public PersonConstraintViolationException(final String message) {
-            super(message);
-        }
-
-    }
 }
